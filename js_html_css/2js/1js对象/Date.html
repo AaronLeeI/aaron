@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <h1>方法</h1>
+    <h2>本地时间格式化为本地时间字符串</h2>
+    <h2>本地时间格式化为UTC时间字符串</h2>
+    <h2>本地时间格式化为标准毫秒数</h2>
+
+    <h1>服务器UTC--浏览器CST</h1>
+    <h2>服务器UTC-->浏览器CST</h2>
+        毫秒数转本地时间.再格式化
+    <h2>浏览器CST-->服务器UTC</h2>
+        当前时间转毫秒数
+</head>
+<body>
+
+</body>
+<script >
+
+
+
+    /**
+     * 本地时间格式化为本地时间字符串
+     */
+    Date.prototype.CST2CSTString = function(fmt) {
+        if(!fmt){
+            fmt = "yyyy-MM-dd hh:mm:ss";
+        }
+        var o = {
+            "M+" : this.getMonth() + 1, // 月份
+            "d+" : this.getDate(), // 日
+            "h+" : this.getHours(), // 小时
+            "m+" : this.getMinutes(), // 分
+            "s+" : this.getSeconds(), // 秒
+            "q+" : Math.floor((this.getMonth() + 3) / 3), // 季度
+            "S" : this.getMilliseconds()
+            // 毫秒
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "")
+                    .substr(4 - RegExp.$1.length));
+        for ( var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k])
+                        : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+
+
+
+    /**
+     * 本地时间格式化为UTC时间字符串
+     */
+    Date.prototype.CST2UTCString = function(fmt) {
+        if(!fmt){
+            fmt = "yyyy-MM-dd hh:mm:ss";
+        }
+        var o = {
+            "M+" : this.getUTCMonth() + 1, // 月份
+            "d+" : this.getUTCDate(), // 日
+            "h+" : this.getUTCHours(), // 小时
+            "m+" : this.getUTCMinutes(), // 分
+            "s+" : this.getUTCSeconds(), // 秒
+            "q+" : Math.floor((this.getMonth() + 3) / 3), // 季度
+            "S" : this.getUTCMilliseconds(),
+            // 毫秒
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getUTCFullYear() + "")
+                    .substr(4 - RegExp.$1.length));
+        for ( var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k])
+                        : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+
+
+    /**
+     * 本地时间格式化为标准毫秒数
+     */
+    Date.prototype.CST2Milliseconds = function() {
+        var myDate = new Date();
+        return Date.UTC(myDate.getUTCFullYear(),
+                        myDate.getUTCMonth(),
+                        myDate.getUTCDate(),
+                        myDate.getUTCHours(),
+                        myDate.getUTCMinutes(),
+                        myDate.getUTCSeconds()
+                        ,myDate.getUTCMilliseconds()
+                        )
+    }
+
+
+
+
+    /**
+     * 简单应用
+     */
+    /**本地时间***/
+    var myDate = new Date();
+    myDate.getYear(); //获取当前年份(2位)
+    myDate.getFullYear(); //获取完整的年份(4位,1970-????)
+    myDate.getMonth(); //获取当前月份(0-11,0代表1月)
+    myDate.getDate(); //获取当前日(1-31)
+    myDate.getDay(); //获取当前星期X(0-6,0代表星期天)
+    myDate.getTime(); //获取当前时间(从1970.1.1开始的毫秒数)
+    myDate.getHours(); //获取当前小时数(0-23)
+    myDate.getMinutes(); //获取当前分钟数(0-59)
+    myDate.getSeconds(); //获取当前秒数(0-59)
+    myDate.getMilliseconds(); //获取当前毫秒数(0-999)
+    myDate.toLocaleDateString(); //获取当前日期
+    var mytime=myDate.toLocaleTimeString(); //获取当前时间
+    myDate.toLocaleString( ); //获取日期与时间
+    /**UTC时间***/
+
+
+    /**
+     * UTC
+     */
+    console.log("     标准UTC时间:"+myDate.toUTCString());
+    console.log("当前时间转 毫秒数:"+myDate.CST2Milliseconds());
+    console.log(" 毫秒数转本地时间:"+new Date(myDate.CST2Milliseconds()));
+    console.log(" 毫秒数转本地时间:"+new Date(myDate.CST2Milliseconds()).CST2CSTString("yyyy-MM-dd hh:mm:ss:S"));
+    console.log("CST-->CST-String:"+myDate.CST2CSTString("yyyy-MM-dd hh:mm:ss:S"));
+    console.log("CST-->UTC-String:"+myDate.CST2UTCString("yyyy-MM-dd hh:mm:ss:S"));
+
+
+
+</script>
+</html>
