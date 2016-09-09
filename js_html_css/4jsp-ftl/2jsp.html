@@ -4,7 +4,7 @@
 
 <h1>取值</h1>
     ${awardConfig.updatedBy}
-    <#if ${var}>是错误的，正确的方法是：<#if var>,  而且此处var必须为布尔值。
+    ${}
 
 
 <h1>逻辑判断</h1>
@@ -23,12 +23,6 @@
     </#if>
 <h3>三目</h3>
     ${true?string('5','7')}
-
-
-
-<h1>格式化</h1>
-<h2>时间格式化</h2>
-${awardConfig.updatedOn?string("yyyy年MM月dd日")}
 
 
 
